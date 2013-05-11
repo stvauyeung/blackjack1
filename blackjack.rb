@@ -1,5 +1,3 @@
-require 'pry'
-
 def calculate_value(cards)
   total_value = 0
   cards.each do |card|
@@ -17,6 +15,7 @@ def calculate_value(cards)
       end
       total_value =+ card_value
   end
+  total_value
 end
 
 def deal_to(player, deck)
@@ -37,8 +36,6 @@ dealer_cards = []
 
 2.times do deal_to(dealer_cards, deck) end
 2.times do deal_to(player_cards, deck) end
-
-binding.pry
 
 # player_value = calculate_value(player_cards)
 # dealer_value = calculate_value(dealer_cards)
