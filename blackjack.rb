@@ -23,6 +23,10 @@ def deal_to(player, deck)
   player << deck.pop
 end
 
+def show_cards(player, dealer)
+  "Player holds " + calculate_value(player).to_s + ", dealer shows " + calculate_value(dealer).to_s
+end
+
 puts "Welcome to Blackjack!"
   # deck setup
   suits = ["H", "D", "S", "C"]
@@ -30,7 +34,7 @@ puts "Welcome to Blackjack!"
   deck = suits.product(cards)
 
 game_on = true
-while game_on == true     
+while game_on
   # dealing the cards
   deck.shuffle!
   player_cards = []
@@ -46,7 +50,7 @@ while game_on == true
 
   # player turn
   player_turn = true
-  while player_turn == true
+  while player_turn
     if calculate_value(player_cards) < 21
     puts "Enter 1 to hit, 0 to hold.."
     hit_hold = gets.chomp.to_i
@@ -54,6 +58,7 @@ while game_on == true
         deal_to(player_cards, deck)
         puts "Player shows: #{player_cards}. Total value: #{calculate_value(player_cards)}"
       elsif hit_hold == 0
+        puts "You hold."
         player_turn = false
       else
         puts "Please enter 1 to hit, 0 to hold.."
@@ -69,10 +74,10 @@ while game_on == true
   end
   puts
   # dealer turn
-  puts "Dealer flips: #{dealer_cards}."
+  puts "Dealer flips: #{dealer_cards}. Total value: #{calculate_value(dealer_cards)}"
   sleep(2)
   dealer_turn = true
-  while dealer_turn == true
+  while dealer_turn
     if calculate_value(dealer_cards) < 17
       puts "Dealer hits.."
       sleep(1)
@@ -94,29 +99,31 @@ while game_on == true
   # calculate winner
   if calculate_value(player_cards) == 21
     if calculate_value(dealer_cards) == 21
-      puts "Player and dealer both show 21, push."
+      puts "#{show_cards(player_cards, dealer_cards)}, push."
     elsif calculate_value(dealer_cards) < 21
-      puts "Player holds 21, dealer holds #{calculate_value(dealer_cards)}, player wins!"
+      puts "#{show_cards(player_cards, dealer_cards)}, player wins!"
     elsif calculate_value(dealer_cards) > 21
-      puts "Player holds 21, dealer busts, player wins!"
+      puts "#{show_cards(player_cards, dealer_cards)}, player wins!"
     end
   elsif calculate_value(player_cards) < 21
     if calculate_value(dealer_cards) == 21
-      puts "Player shows #{calculate_value(player_cards)} and dealer shows 21, dealer wins."
+      puts "#{show_cards(player_cards, dealer_cards)}, dealer wins."
     elsif calculate_value(dealer_cards) < calculate_value(player_cards)
-      puts "Player shows #{calculate_value(player_cards)}, dealer shows #{calculate_value(dealer_cards)}, player wins!"
+      puts "#{show_cards(player_cards, dealer_cards)}, player wins!"
     elsif calculate_value(dealer_cards) > 21
-      puts "Player shows #{calculate_value(player_cards)}, dealer busts, player wins!"
+      puts "#{show_cards(player_cards, dealer_cards)}, player wins!"
     elsif calculate_value(dealer_cards) > calculate_value(player_cards)
-      puts "Player shows #{calculate_value(player_cards)}, dealer shows #{calculate_value(dealer_cards)}, dealer wins."
+      puts "#{show_cards(player_cards, dealer_cards)}, dealer wins."
+    elsif calculate_value(dealer_cards) == calculate_value(player_cards)
+      puts "#{show_cards(player_cards, dealer_cards)}, push."
     end
   elsif calculate_value(player_cards) > 21
     if calculate_value(dealer_cards) == 21
-      puts "Player busts, and dealer shows 21, dealer wins."
+      puts "#{show_cards(player_cards, dealer_cards)}, dealer wins."
     elsif calculate_value(dealer_cards) < 21
-      puts "Player busts, dealer holds #{calculate_value(dealer_cards)}, dealer wins."
+      puts "#{show_cards(player_cards, dealer_cards)}, dealer wins."
     elsif calculate_value(dealer_cards) > 21
-      puts "Player busts and dealer busts, push."
+      puts "#{show_cards(player_cards, dealer_cards)}, push."
     end
   end
   puts
@@ -124,7 +131,6 @@ while game_on == true
   next_deal = gets.chomp.to_i
   if next_deal == 1
     deck = suits.product(cards)
-    game_on = true
   elsif next_deal == 0
     puts "Thanks for playing Blackjack!"
     game_on = false
