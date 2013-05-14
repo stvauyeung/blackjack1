@@ -1,22 +1,22 @@
 def calculate_value(cards)
-  total_value = [0]
-  cards.each do |card|
-    value_on_card = card[1]
-      if (2..10).include? value_on_card.to_i
-        card_value = value_on_card.to_i
-      elsif value_on_card == 'J' or value_on_card == 'Q'or value_on_card == 'K'
-        card_value = 10
-      elsif value_on_card == 'A'
-        if total_value.inject{|sum,x| sum + x } > 10
-          card_value = 1
-        else
-          card_value = 11
-        end 
+  arr = cards.map { |e| e[1]  }
+  total = 0
+  arr.each do |value|
+      if value == 'A'
+        total += 11
+      elsif value.to_i == 0
+        total += 10
+      else
+        total += value.to_i 
       end
-      total_value << card_value
   end
-  sum_values = total_value.inject{|sum,x| sum + x }
-  sum_values
+  
+  #correct for aces
+  arr.select{ |e| e == 'A' }.count.times do
+    total -= 10 if total > 21
+  end
+
+  total
 end
 
 def deal_to(player, deck)
